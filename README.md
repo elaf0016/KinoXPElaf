@@ -68,6 +68,8 @@ Indstillingerne kan ændres med miljøvariabler:
 ./mvnw verify
 ```
 
+Der er integrationstests af hele REST API'et (`src/test/java/dk/kinoxp/KinoApiTests.java`),
+som bl.a. tjekker, at ugyldige reservationer bliver afvist.
 Testene bruger en H2-database i hukommelsen, så de kan køre uden MySQL.
 GitHub Actions kører den samme kommando ved hvert push og pull request
 (se `.github/workflows/ci.yaml`).
@@ -81,6 +83,15 @@ GitHub Actions kører den samme kommando ved hvert push og pull request
 | GET | `/api/film/{filmId}/forestillinger` | Forestillinger for en film |
 | GET | `/api/reservationer` | Alle reservationer |
 | POST | `/api/reservationer` | Opret en reservation |
+
+Ved fejl svarer API'et med en passende statuskode og en besked, fx:
+
+- `404 Not Found`, hvis filmen eller forestillingen ikke findes
+- `400 Bad Request`, hvis navnet mangler, eller antal billetter ikke er mellem 1 og 10
+
+```json
+{ "message": "Antal billetter skal være mellem 1 og 10" }
+```
 
 ## Struktur
 

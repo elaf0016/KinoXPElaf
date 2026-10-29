@@ -1,32 +1,38 @@
 const params = new URLSearchParams(window.location.search);
 const filmId = params.get("id");
 
-fetch(`/api/film/${filmId}`)
-    .then(response => response.json())
-    .then(film => {
-        const filmDetaljer = document.getElementById("filmDetaljer");
+const filmDetaljer = document.getElementById("filmDetaljer");
+const forestillingContainer = document.getElementById("filmForestillinger");
 
+hentJson(`/api/film/${encodeURIComponent(filmId)}`)
+    .then(film => {
         filmDetaljer.innerHTML = `
-            <img src="${film.plakatUrl}" alt="${film.titel}" width="200">
-            <h2>${film.titel}</h2>
+            <img src="${escapeHtml(film.plakatUrl)}" alt="${escapeHtml(film.titel)}" width="200">
+            <h2>${escapeHtml(film.titel)}</h2>
             <p>Varighed: ${film.varighed} min</p>
-            <p>Aldersgrænse: ${film.aldersGraense}</p>
+            <p>Aldersgrænse: ${film.aldersGraense} år</p>
         `;
+    })
+    .catch(error => {
+        filmDetaljer.innerHTML = "<p>Filmen blev ikke fundet.</p>";
+        console.error("Fejl:", error);
     });
 
-fetch(`/api/film/${filmId}/forestillinger`)
-    .then(response => response.json())
+hentJson(`/api/film/${encodeURIComponent(filmId)}/forestillinger`)
     .then(data => {
-        const container = document.getElementById("filmForestillinger");
+        if (data.length === 0) {
+            forestillingContainer.innerHTML = "<p>Ingen forestillinger for denne film.</p>";
+            return;
+        }
 
         data.forEach(forestilling => {
             const div = document.createElement("div");
             div.innerHTML = `
-                <p><strong>Starttid:</strong> ${forestilling.startTid}</p>
-                <p><strong>Sal:</strong> ${forestilling.sal.navn}</p>
+                <p><strong>Starttid:</strong> ${formatTid(forestilling.startTid)}</p>
+                <p><strong>Sal:</strong> ${escapeHtml(forestilling.sal.navn)}</p>
 
                 <input type="text" id="navn-${forestilling.id}" placeholder="Dit navn">
-                <input type="number" id="antal-${forestilling.id}" placeholder="Antal billetter">
+                <input type="number" id="antal-${forestilling.id}" placeholder="Antal billetter" min="1" max="10">
 
                 <button onclick="opretReservation(${forestilling.id})">
                     Reserver billetter
@@ -35,34 +41,35 @@ fetch(`/api/film/${filmId}/forestillinger`)
                 <p id="besked-${forestilling.id}"></p>
                 <hr>
             `;
-            container.appendChild(div);
+            forestillingContainer.appendChild(div);
         });
-    });
+    })
+    .catch(error => console.error("Fejl:", error));
 
 function opretReservation(forestillingId) {
-    const navn = document.getElementById(`navn-${forestillingId}`).value;
-    const antalBilletter = document.getElementById(`antal-${forestillingId}`).value;
+    const navn = document.getElementById(`navn-${forestillingId}`).value.trim();
+    const antalBilletter = Number(document.getElementById(`antal-${forestillingId}`).value);
     const besked = document.getElementById(`besked-${forestillingId}`);
 
-    fetch("/api/reservationer", {
+    if (!navn || !Number.isInteger(antalBilletter) || antalBilletter < 1) {
+        visBesked(besked, "Udfyld navn og antal billetter.", false);
+        return;
+    }
+
+    hentJson("/api/reservationer", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             navn: navn,
             antalBilletter: antalBilletter,
-            forestilling: {
-                id: forestillingId
-            }
+            forestilling: { id: forestillingId }
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            besked.innerText = "Reservation gennemført!";
-        })
-        .catch(error => {
-            besked.innerText = "Der skete en fejl.";
-            console.error("Fejl:", error);
-        });
+        .then(() => visBesked(besked, "Reservation gennemført!", true))
+        .catch(error => visBesked(besked, error.message, false));
+}
+
+function visBesked(element, tekst, ok) {
+    element.innerText = tekst;
+    element.className = ok ? "besked-ok" : "besked-fejl";
 }

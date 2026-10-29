@@ -1,21 +1,29 @@
-fetch("/api/forestillinger")
-    .then(response => response.json())
+const container = document.getElementById("forestillinger");
+
+hentJson("/api/forestillinger")
     .then(data => {
-        const container = document.getElementById("forestillinger");
+        if (data.length === 0) {
+            container.innerHTML = "<p>Der er ingen forestillinger lige nu.</p>";
+            return;
+        }
 
         data.forEach(forestilling => {
+            const film = forestilling.film;
             const div = document.createElement("div");
             div.innerHTML = `
-                <img src="${forestilling.film.plakatUrl}" alt="${forestilling.film.titel}">
+                <img src="${escapeHtml(film.plakatUrl)}" alt="${escapeHtml(film.titel)}">
                 <h3>
-                    <a href="film.html?id=${forestilling.film.id}">
-                        ${forestilling.film.titel}
+                    <a href="film.html?id=${film.id}">
+                        ${escapeHtml(film.titel)}
                     </a>
                 </h3>
-                <p>Starttid: ${forestilling.startTid}</p>
-                <p>Sal: ${forestilling.sal.navn}</p>
+                <p>Starttid: ${formatTid(forestilling.startTid)}</p>
+                <p>Sal: ${escapeHtml(forestilling.sal.navn)}</p>
             `;
             container.appendChild(div);
         });
     })
-    .catch(error => console.error("Fejl:", error));
+    .catch(error => {
+        container.innerHTML = "<p>Kunne ikke hente forestillinger.</p>";
+        console.error("Fejl:", error);
+    });
