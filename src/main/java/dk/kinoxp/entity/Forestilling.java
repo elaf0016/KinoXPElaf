@@ -18,7 +18,17 @@ public class Forestilling {
     @ManyToOne
     private Sal sal;
 
+    // Beregnes ud fra salens kapacitet og reservationerne - gemmes ikke i databasen
+    @Transient
+    private Integer ledigePladser;
+
     public Forestilling() {
+    }
+
+    public Forestilling(LocalDateTime startTid, Film film, Sal sal) {
+        this.startTid = startTid;
+        this.film = film;
+        this.sal = sal;
     }
 
     public Long getId() {
@@ -47,5 +57,13 @@ public class Forestilling {
 
     public void setSal(Sal sal) {
         this.sal = sal;
+    }
+
+    public Integer getLedigePladser() {
+        return ledigePladser;
+    }
+
+    public void setLedigePladser(Integer ledigePladser) {
+        this.ledigePladser = ledigePladser;
     }
 }

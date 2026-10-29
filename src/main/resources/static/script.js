@@ -1,29 +1,46 @@
-const container = document.getElementById("forestillinger");
+const filmContainer = document.getElementById("film");
 
-hentJson("/api/forestillinger")
-    .then(data => {
-        if (data.length === 0) {
-            container.innerHTML = "<p>Der er ingen forestillinger lige nu.</p>";
+// Viser alle film som kort med de næste tre forestillinger
+Promise.all([hentJson("/api/film"), hentJson("/api/forestillinger")])
+    .then(([alleFilm, forestillinger]) => {
+        if (alleFilm.length === 0) {
+            filmContainer.innerHTML = `<p class="tom">Der er ingen film på programmet lige nu.</p>`;
             return;
         }
 
-        data.forEach(forestilling => {
-            const film = forestilling.film;
-            const div = document.createElement("div");
-            div.innerHTML = `
-                <img src="${escapeHtml(film.plakatUrl)}" alt="${escapeHtml(film.titel)}">
-                <h3>
-                    <a href="film.html?id=${film.id}">
-                        ${escapeHtml(film.titel)}
-                    </a>
-                </h3>
-                <p>Starttid: ${formatTid(forestilling.startTid)}</p>
-                <p>Sal: ${escapeHtml(forestilling.sal.navn)}</p>
+        alleFilm.forEach(film => {
+            const naesteTre = forestillinger
+                .filter(f => f.film.id === film.id)
+                .slice(0, 3);
+
+            const tider = naesteTre.map(f => `
+                <a class="tid" href="film.html?id=${film.id}&forestilling=${f.id}">
+                    <strong>${formatKlokken(f.startTid)}</strong>
+                    <small>${formatKortDag(f.startTid)}</small>
+                </a>
+            `).join("");
+
+            const kort = document.createElement("article");
+            kort.className = "film-kort";
+            kort.innerHTML = `
+                <a class="plakat" href="film.html?id=${film.id}">
+                    <img src="${escapeHtml(film.plakatUrl)}" alt="Plakat for ${escapeHtml(film.titel)}" loading="lazy">
+                </a>
+                <div class="film-kort-indhold">
+                    <h3><a href="film.html?id=${film.id}">${escapeHtml(film.titel)}</a></h3>
+                    <div class="info-linje">
+                        <span class="maerke alder">${formatAlder(film.aldersGraense)}</span>
+                        <span>${escapeHtml(film.genre)}</span>
+                        <span>·</span>
+                        <span>${formatVarighed(film.varighed)}</span>
+                    </div>
+                    <div class="tider">${tider || `<span class="tom">Ingen forestillinger</span>`}</div>
+                </div>
             `;
-            container.appendChild(div);
+            filmContainer.appendChild(kort);
         });
     })
     .catch(error => {
-        container.innerHTML = "<p>Kunne ikke hente forestillinger.</p>";
+        filmContainer.innerHTML = `<p class="besked-fejl">Kunne ikke hente programmet. Prøv igen om lidt.</p>`;
         console.error("Fejl:", error);
     });

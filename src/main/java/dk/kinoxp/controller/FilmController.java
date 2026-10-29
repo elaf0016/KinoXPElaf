@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 public class FilmController {
 
@@ -15,6 +17,11 @@ public class FilmController {
 
     public FilmController(FilmRepository filmRepository) {
         this.filmRepository = filmRepository;
+    }
+
+    @GetMapping("/api/film")
+    public List<Film> hentAlleFilm() {
+        return filmRepository.findAll();
     }
 
     @GetMapping("/api/film/{id}")

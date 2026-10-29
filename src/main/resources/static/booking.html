@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Find booking – KinoXP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-indhold">
+        <a href="index.html" class="logo">Kino<span>XP</span></a>
+        <nav class="menu">
+            <a href="index.html">Film</a>
+            <a href="booking.html" class="aktiv">Find booking</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <h1>Find din booking</h1>
+        <p>Skriv den bookingkode, du fik, da du reserverede.</p>
+    </section>
+
+    <form id="soegForm" class="panel">
+        <div class="felt">
+            <label for="kode">Bookingkode</label>
+            <div class="soeg-raekke">
+                <input type="text" id="kode" placeholder="KXP-XXXXXX" required>
+                <button type="submit" class="knap">Find</button>
+            </div>
+        </div>
+        <p id="besked" class="besked"></p>
+    </form>
+
+    <section class="sektion" id="resultat" hidden></section>
+</main>
+
+<footer>
+    <div class="footer-indhold">
+        <span>KinoXP – projekt af Elaf Al-Hashimi, datamatiker på EK</span>
+        <a href="https://github.com/elaf0016/KinoXPElaf">Se koden på GitHub</a>
+    </div>
+</footer>
+
+<script src="faelles.js"></script>
+<script src="booking.js"></script>
+</body>
+</html>

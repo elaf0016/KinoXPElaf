@@ -2,19 +2,60 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Film detaljer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Film – KinoXP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<a href="index.html" class="knap-link">← Tilbage til forsiden</a>
+<header class="topbar">
+    <div class="topbar-indhold">
+        <a href="index.html" class="logo">Kino<span>XP</span></a>
+        <nav class="menu">
+            <a href="index.html" class="aktiv">Film</a>
+            <a href="booking.html">Find booking</a>
+        </nav>
+    </div>
+</header>
 
-<h1>Film detaljer</h1>
+<main>
+    <a href="index.html" class="tilbage">← Alle film</a>
 
-<div id="filmDetaljer"></div>
+    <section id="filmDetaljer" class="film-top"></section>
 
-<h2>Forestillinger</h2>
-<div id="filmForestillinger"></div>
+    <section class="sektion">
+        <h2>Vælg forestilling</h2>
+        <div id="forestillinger"></div>
+    </section>
+
+    <section class="sektion" id="reservation" hidden>
+        <h2>Reserver billetter</h2>
+        <form id="reservationForm" class="panel">
+            <p id="valgtForestilling"></p>
+            <div class="felt">
+                <label for="navn">Dit navn</label>
+                <input type="text" id="navn" autocomplete="name" required>
+            </div>
+            <div class="felt">
+                <label for="antal">Antal billetter (max 10)</label>
+                <input type="number" id="antal" min="1" max="10" value="2" required>
+            </div>
+            <button type="submit" class="knap" id="reserverKnap">Reserver billetter</button>
+            <p id="besked" class="besked"></p>
+        </form>
+    </section>
+
+    <section class="sektion" id="bekraeftelse" hidden></section>
+</main>
+
+<footer>
+    <div class="footer-indhold">
+        <span>KinoXP – projekt af Elaf Al-Hashimi, datamatiker på EK</span>
+        <a href="https://github.com/elaf0016/KinoXPElaf">Se koden på GitHub</a>
+    </div>
+</footer>
 
 <script src="faelles.js"></script>
 <script src="film.js"></script>

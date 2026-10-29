@@ -9,6 +9,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String bookingKode;
+
     private String navn;
 
     private int antalBilletter;
@@ -20,6 +23,14 @@ public class Reservation {
 
     public Long getId() {
         return id;
+    }
+
+    public String getBookingKode() {
+        return bookingKode;
+    }
+
+    public void setBookingKode(String bookingKode) {
+        this.bookingKode = bookingKode;
     }
 
     public String getNavn() {

@@ -10,9 +10,27 @@ function escapeHtml(tekst) {
         .replaceAll("'", "&#39;");
 }
 
-// "2026-03-10T19:30:00" -> "10. mar. 2026 19.30"
-function formatTid(tid) {
-    return new Date(tid).toLocaleString("da-DK", { dateStyle: "medium", timeStyle: "short" });
+// "2026-11-02T19:30:00" -> "19.30"
+function formatKlokken(tid) {
+    return new Date(tid).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
+}
+
+// "2026-11-02T19:30:00" -> "mandag 2. november"
+function formatDag(tid) {
+    return new Date(tid).toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long" });
+}
+
+// "2026-11-02T19:30:00" -> "man. 2. nov."
+function formatKortDag(tid) {
+    return new Date(tid).toLocaleDateString("da-DK", { weekday: "short", day: "numeric", month: "short" });
+}
+
+function formatAlder(aldersGraense) {
+    return aldersGraense === 0 ? "Tilladt for alle" : `Fra ${aldersGraense} år`;
+}
+
+function formatVarighed(minutter) {
+    return `${Math.floor(minutter / 60)} t ${minutter % 60} min`;
 }
 
 // fetch, der giver en fejl, hvis serveren svarer med fx 400 eller 404

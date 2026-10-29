@@ -1,93 +1,484 @@
+:root {
+    --baggrund: #0d0d10;
+    --flade: #17171c;
+    --flade-hover: #1f1f26;
+    --kant: #2a2a33;
+    --tekst: #f2f2f5;
+    --daempet: #9a9aa8;
+    --accent: #f5a524;
+    --accent-moerk: #d98c0d;
+    --ok: #3ecf8e;
+    --fejl: #ff6b6b;
+    --radius: 12px;
+    --bredde: 1180px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #111;
-    color: white;
-    padding: 30px;
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--baggrund);
+    color: var(--tekst);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-h1 {
-    color: orange;
+a {
+    color: inherit;
 }
 
-#forestillinger div {
-    background-color: #222;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+main {
+    flex: 1;
+    width: 100%;
+    max-width: var(--bredde);
+    margin: 0 auto;
+    padding: 32px 20px 64px;
 }
 
-#forestillinger a {
-    color: white;
+h1, h2, h3 {
+    line-height: 1.2;
+    margin: 0 0 12px;
+}
+
+/* ---------- Topbar ---------- */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(13, 13, 16, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--kant);
+}
+
+.topbar-indhold {
+    max-width: var(--bredde);
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     text-decoration: none;
 }
 
-#forestillinger a:hover {
-    color: orange;
+.logo span {
+    color: var(--accent);
 }
 
-#filmForestillinger div {
-    background-color: #222;
-    padding: 15px;
-    margin-bottom: 15px;
+.menu {
+    display: flex;
+    gap: 6px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--daempet);
+    font-weight: 600;
+    padding: 8px 12px;
     border-radius: 8px;
 }
 
-#filmForestillinger input {
+.menu a:hover,
+.menu a.aktiv {
+    color: var(--tekst);
+    background: var(--flade);
+}
+
+/* ---------- Forside ---------- */
+
+.hero {
+    padding: 24px 0 32px;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.hero p {
+    color: var(--daempet);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 0;
+}
+
+.film-gitter {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.film-kort {
+    background: var(--flade);
+    border: 1px solid var(--kant);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.film-kort:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+}
+
+.film-kort .plakat {
     display: block;
-    margin: 8px 0;
-    padding: 8px;
-    width: 220px;
-    border: none;
-    border-radius: 6px;
+    aspect-ratio: 2 / 3;
+    background: var(--flade-hover);
 }
 
-#filmForestillinger button {
-    background-color: orange;
-    color: black;
-    border: none;
-    padding: 10px 14px;
-    font-weight: bold;
+.film-kort img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.film-kort-indhold {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.film-kort h3 {
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.film-kort h3 a {
+    text-decoration: none;
+}
+
+.film-kort h3 a:hover {
+    color: var(--accent);
+}
+
+/* ---------- Mærker og tider ---------- */
+
+.info-linje {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--daempet);
+    font-size: 0.9rem;
+}
+
+.maerke {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--kant);
+    color: var(--tekst);
+}
+
+.maerke.alder {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #111;
+}
+
+.tider {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.tid {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--flade-hover);
+    border: 1px solid var(--kant);
+    line-height: 1.2;
+}
+
+.tid strong {
+    font-size: 0.95rem;
+}
+
+.tid small {
+    color: var(--daempet);
+}
+
+a.tid:hover {
+    border-color: var(--accent);
+}
+
+/* ---------- Filmside ---------- */
+
+.tilbage {
+    display: inline-block;
+    color: var(--daempet);
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.tilbage:hover {
+    color: var(--tekst);
+}
+
+.film-top {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.film-top img {
+    width: 100%;
+    border-radius: var(--radius);
+    display: block;
+}
+
+.film-top h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.beskrivelse {
+    color: #cfcfd8;
+    font-size: 1.05rem;
+    max-width: 620px;
+}
+
+.sektion {
+    margin-top: 40px;
+}
+
+.sektion h2 {
+    font-size: 1.3rem;
+}
+
+.dag {
+    margin-bottom: 18px;
+}
+
+.dag h3 {
+    font-size: 0.95rem;
+    color: var(--daempet);
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.tid-knap {
+    font: inherit;
+    color: inherit;
     cursor: pointer;
-    border-radius: 6px;
+    min-width: 92px;
 }
 
-#filmForestillinger button:hover {
-    filter: brightness(0.9);
+.tid-knap:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+
+.tid-knap.valgt {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #111;
+}
+
+.tid-knap.valgt small {
+    color: #3a2a00;
+}
+
+.tid-knap:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ---------- Formular og panel ---------- */
+
+.panel {
+    background: var(--flade);
+    border: 1px solid var(--kant);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 520px;
+}
+
+.panel p {
+    color: var(--daempet);
+    margin-top: 0;
+}
+
+.felt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.felt label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--daempet);
+}
+
+input {
+    font: inherit;
+    color: var(--tekst);
+    background: var(--baggrund);
+    border: 1px solid var(--kant);
+    border-radius: 8px;
+    padding: 10px 12px;
+    width: 100%;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.knap {
+    font: inherit;
+    font-weight: 700;
+    color: #111;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.knap:hover {
+    background: var(--accent-moerk);
+}
+
+.knap:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.besked {
+    margin: 12px 0 0;
+    font-weight: 600;
 }
 
 .besked-ok {
-    margin-top: 10px;
-    color: lightgreen;
+    color: var(--ok);
 }
 
-button {
-    background-color: orange;
-    color: black;
-    border: none;
-    padding: 10px 14px;
-    margin-bottom: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-}
-.knap-link {
-    display: inline-block;
-    background-color: orange;
-    color: black;
-    padding: 10px 14px;
-    margin-bottom: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 6px;
-}
 .besked-fejl {
-    margin-top: 10px;
-    color: #ff6b6b;
+    color: var(--fejl);
 }
 
-#reservationer div {
-    background-color: #222;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+/* ---------- Bekræftelse / booking ---------- */
+
+.billet {
+    background: var(--flade);
+    border: 1px solid var(--kant);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 520px;
+}
+
+.billet .kode {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 4px 0 16px;
+}
+
+.billet dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    margin: 0;
+}
+
+.billet dt {
+    color: var(--daempet);
+}
+
+.billet dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.soeg-raekke {
+    display: flex;
+    gap: 10px;
+}
+
+.soeg-raekke input {
+    text-transform: uppercase;
+}
+
+.tom {
+    color: var(--daempet);
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+    border-top: 1px solid var(--kant);
+    color: var(--daempet);
+    font-size: 0.9rem;
+}
+
+.footer-indhold {
+    max-width: var(--bredde);
+    margin: 0 auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+footer a {
+    color: var(--tekst);
+}
+
+/* ---------- Mobil ---------- */
+
+@media (max-width: 720px) {
+    .film-top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .film-top img {
+        max-width: 240px;
+    }
+
+    .film-gitter {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .soeg-raekke {
+        flex-direction: column;
+    }
 }
